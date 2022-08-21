@@ -59,4 +59,20 @@ class User extends Authenticatable
     {
         return $this->hasOne(Post::class, 'user_id', 'id')->ofMany('creation_date', 'max');
     }
+
+    /**
+     * Отношение "Многие через отношение"
+     * Получить все все комментарии для пользователя.
+     */
+    public function comments()
+    {
+        return $this->hasManyThrough(
+            Comment::class,
+            Post::class,
+            'user_id', // Внешний ключ в таблице Post
+            'post_id',  // Внешний ключ в таблице `Comment
+            'id', // Локальный ключ в Comment
+            'post_id' // Локальный ключ в Post
+        );
+    }
 }

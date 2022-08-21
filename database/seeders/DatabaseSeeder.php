@@ -15,8 +15,9 @@ class DatabaseSeeder extends Seeder
     {
         // Вызов дополнительных наполнителей
         $this->call([
-            UserSeeder::class,
-            PostSeeder::class,
+//            UserSeeder::class,
+//            PostSeeder::class,
+            CommentSeeder::class
         ]);
     }
 }
