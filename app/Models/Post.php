@@ -47,4 +47,14 @@ class Post extends Model
         'title',
         'description'
     ];
+
+    // связь один ко многим: один пользователь у нескольких записей
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id')
+            ->withDefault(
+                ['name' => 'Guest Author'] // можно передать параметры по умолчанию
+            ); // вернет пустую модель User, если к модели Post не привязан ни один user.
+        // это нужно чтобы не делать постоянные проверки на null
+    }
 }
