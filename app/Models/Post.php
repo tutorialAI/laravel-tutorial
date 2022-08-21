@@ -80,4 +80,28 @@ class Post extends Model
     {
         //
     }
+
+    /*
+    * Применение глобальных диапазонов
+     * Чтобы игнорировать глбальный дипазон в контроллере
+     * Post::withoutGlobalScope(AncientScope::class),
+     * игнорировать всех Post::withoutGlobalScopes()
+    */
+    protected static function booted()
+    {
+        static::addGlobalScope(new AncientScope);
+    }
+
+    /**
+     * Локальный диапозон, можно применять только к определенному запросу
+     * Диапазон запроса, включающий посты только определенного пользователя
+     * В контроллере используется: Post::ForUser(2)
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeForUser($query, $userId)
+    {
+        return $query->where('user_id', '=', $userId);
+    }
 }
