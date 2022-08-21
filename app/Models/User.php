@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -45,5 +46,17 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    //Один из многих, позволяет скрыть некоторые частые запросы в методы,
+    // и в контроллере их можно булет вызывать User::find($id)->oldestPost;
+    public function oldestPost(): HasOne
+    {
+        return $this->hasOne(Post::class)->ofMany('creation_date', 'min');
+    }
+
+    public function latestPost(): HasOne
+    {
+        return $this->hasOne(Post::class, 'user_id', 'id')->ofMany('creation_date', 'max');
     }
 }
