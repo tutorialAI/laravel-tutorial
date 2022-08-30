@@ -41,4 +41,12 @@ Route::get('/comments/{comment}', function (\App\Models\Comment $comment) {
 // Выполняем разные запросы
 Route::resource('posts', PostController::class);
 
+
+// Посредники
+Route::middleware(['role:admin', 'token.verified', 'another.middleware'])->prefix('just')->group(function () {
+    Route::group('/watch/{movie}', function () {
+        return response('You can watch this resource');
+    });
+});
+
 require __DIR__.'/auth.php';
