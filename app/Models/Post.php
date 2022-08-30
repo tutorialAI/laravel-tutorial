@@ -43,9 +43,22 @@ class Post extends Model
      */
     protected $dateFormat = 'U';
 
+    /*
+     * Эти поля можно использовать при массовом обновление или вствке,
+     * т.е методами create = Flight::create(['name' => 'London to Paris']);
+     *  или update = Flight::where('active', 1)->where('destination', 'San Diego')->update(['delayed' => 1]);
+     * */
     protected $fillable = [
         'title',
         'description'
+    ];
+    /*
+     *  Сюда пишем поля которые не будут участвовать в массовом присвоение,
+     *  если массив пустой, то все поля будет доступны для массового присвоения
+     *  т.е методы fill, create и update
+     * */
+    protected $guarded = [
+
     ];
 
     // связь один ко многим: один пользователь у нескольких записей
@@ -56,6 +69,12 @@ class Post extends Model
                 ['name' => 'Guest Author'] // можно передать параметры по умолчанию
             ); // вернет пустую модель User, если к модели Post не привязан ни один user.
         // это нужно чтобы не делать постоянные проверки на null
+    }
+
+    // связь один ко многим: несколько комментариев у одной записи
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'post_id', 'post_id')->withoutGlobalScopes();
     }
 
     /*
