@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,5 +36,9 @@ Route::get('/comments/{comment}', function (\App\Models\Comment $comment) {
 })->middleware('can:update,comment');
 
 // })->can('update', 'post'); // тоже самое, что и выше
+
+// Тут все роуты index,update,create и т.д
+// Выполняем разные запросы
+Route::resource('posts', PostController::class);
 
 require __DIR__.'/auth.php';
