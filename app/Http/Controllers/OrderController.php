@@ -28,17 +28,27 @@ class OrderController extends Controller
             'ordered_at' => now()
         ]);
 
-        $orderProducts = [];
-        foreach ($validated['products'] as $product) {
-            $orderProducts[$product['id']] = [
-                'quantity' => $product['quantity'],
-                'price' => $products[$product['id']] * $product['quantity']
-            ];
-        }
-
+        $orderProducts = $this->mapProducts($validated['products'], $products);
         $order->products()->attach($orderProducts);
         DB::commit();
 
+        // возможно это костыль, но сделал для примера проверки событя
+        $order['products'] = $orderProducts;
+        OrderShipped::dispatch($order);
+
         return response('Ok');
+    }
+
+    private function mapProducts($requestProducts, $exitsProducts)
+    {
+        $result = [];
+        foreach ($requestProducts as $p) {
+            $result[$p['id']] = [
+                'quantity' => $p['quantity'],
+                'price' => $exitsProducts[$p['id']] * $p['quantity']
+            ];
+        }
+
+        return $result;
     }
 }
