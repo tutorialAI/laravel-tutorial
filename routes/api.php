@@ -60,6 +60,8 @@ Route::domain('{account}.example.com')->group(function () {
 // роуты проверки авторизации
 Route::post('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'edit']);
 
+// роуты проверки событий
+Route::post('/orders', [\App\Http\Controllers\OrderController::class, 'store']);
 
 // если не один из маршрутов не совпал
 Route::fallback(function () {
